@@ -55,4 +55,24 @@ export class TreeStore {
   addItem(item: Item): void {
     this.items.push(item);
   }
+  removeItem(id: ItemId): void {
+    try {
+      let forRemove: Item[] = [];
+      const item: Item | undefined = this.getItem(id);
+      if (item === undefined) {
+        throw new Error(`Элемент с id = ${id} не найден`);
+      }
+      forRemove.push(item);
+      forRemove.push(...this.getAllChildren(id));
+      for (let i = this.items.length - 1; i >= 0; i--) {
+        if (forRemove.includes(this.items[i])) {
+          this.items.splice(i, 1);
+        }
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
+    }
+  }
 }
