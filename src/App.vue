@@ -12,7 +12,7 @@
     { id: 7, parent: 4, label: 'Айтем 7' },
     { id: 8, parent: 4, label: 'Айтем 8' },
   ];
-  const treeStore = new TreeStore(items);
+  const treeStore: TreeStore = new TreeStore(items);
 
   onMounted(() => {
     treeStore.updateItem({ id: 5, parent: 8, label: 'Айтем 5' });

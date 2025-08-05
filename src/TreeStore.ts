@@ -1,13 +1,25 @@
 type ItemId = number | string;
 type ItemParentId = ItemId | null;
 
-export interface Item {
+export type Item = {
   id: ItemId;
   parent: ItemParentId;
   label: string;
+};
+
+interface ITreeStore {
+  items: Item[];
+  getAll(): Item[];
+  getItem(id: ItemId): Item | undefined;
+  getChildren(id: ItemId): Item[];
+  getAllChildren(id: ItemId): Item[];
+  getAllParents(id: ItemId): Item[];
+  addItem(item: Item): void;
+  removeItem(id: ItemId): void;
+  updateItem(item: Item): void;
 }
 
-export class TreeStore {
+export class TreeStore implements ITreeStore {
   constructor(items: Item[]) {
     this.items = items;
   }
