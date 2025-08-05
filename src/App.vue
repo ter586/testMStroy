@@ -15,7 +15,7 @@
   const treeStore = new TreeStore(items);
 
   onMounted(() => {
-    console.log(treeStore);
+    console.log(treeStore.getChildren('2'));
   });
 </script>
 
