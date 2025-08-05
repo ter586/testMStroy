@@ -15,7 +15,7 @@
   const treeStore = new TreeStore(items);
 
   onMounted(() => {
-    treeStore.removeItem(4);
+    treeStore.updateItem({ id: 5, parent: 8, label: 'Айтем 5' });
     console.log(treeStore.getAll());
   });
 </script>

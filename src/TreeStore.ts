@@ -75,4 +75,13 @@ export class TreeStore {
       }
     }
   }
+  updateItem(item: Item): void {
+    for (let i = 0; i < this.items.length; i++) {
+      if (this.items[i].id === item.id) {
+        this.items[i].parent = item.parent;
+        this.items[i].label = item.label;
+        break;
+      }
+    }
+  }
 }
