@@ -1,4 +1,7 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from 'vue';
+import App from './App.vue';
+import { AllEnterpriseModule, ModuleRegistry } from 'ag-grid-enterprise';
 
-createApp(App).mount('#app')
+ModuleRegistry.registerModules([AllEnterpriseModule]);
+
+createApp(App).mount('#app');

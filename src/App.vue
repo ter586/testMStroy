@@ -1,6 +1,11 @@
 <script setup lang="ts">
-  import { onMounted } from 'vue';
   import { type Item, TreeStore } from './TreeStore';
+  import { AgGridVue } from 'ag-grid-vue3';
+  import type {
+    GetRowIdParams,
+    IsFullWidthRowParams,
+    ValueGetterParams,
+  } from 'ag-grid-enterprise';
 
   const items: Item[] = [
     { id: 1, parent: null, label: 'Айтем 1' },
@@ -13,20 +18,59 @@
     { id: 8, parent: 4, label: 'Айтем 8' },
   ];
   const treeStore: TreeStore = new TreeStore(items);
-
-  onMounted(() => {
-    treeStore.updateItem({ id: 5, parent: 8, label: 'Айтем 5' });
-    console.log(treeStore.getAll());
-  });
+  const rowData = treeStore.getAll();
+  const colDefs = [
+    {
+      field: '',
+      width: 100,
+      headerName: '№ п\\п',
+      valueGetter: (params: ValueGetterParams) => {
+        if (params.node && params.node.rowIndex != null) {
+          return params.node.rowIndex + 1;
+        }
+      },
+    },
+    {
+      field: 'label',
+      headerName: 'Наименование',
+      flex: 1,
+    },
+  ];
+  const getRowId = (params: GetRowIdParams<Item>) => params.data.id.toString();
+  const treeDataParentIdField = 'parent';
+  const autoGroupColumnDef = {
+    minWidth: 300,
+    headerName: 'Категория',
+    pinned: null,
+    valueGetter: (params: ValueGetterParams<Item>) => {
+      if (params.data?.id) {
+        return treeStore.getChildren(params.data.id).length > 0
+          ? 'Группа'
+          : 'Элемент';
+      }
+    },
+    cellRendererParams: {
+      suppressCount: true,
+    },
+  };
+  const isFullWidthRow = (params: IsFullWidthRowParams) => {
+    return params.rowNode.data.fullWidth;
+  };
 </script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit
-    <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to
-    read the documentation
-  </p>
+  <ag-grid-vue
+    :rowData="rowData"
+    :columnDefs="colDefs"
+    :tree-data="true"
+    :getRowId="getRowId"
+    :tree-data-parent-id-field="treeDataParentIdField"
+    :autoGroupColumnDef="autoGroupColumnDef"
+    :groupDefaultExpanded="-1"
+    :isFullWidthRow="isFullWidthRow"
+    style="height: 500px; width: 700px"
+  >
+  </ag-grid-vue>
 </template>
 
 <style scoped></style>
